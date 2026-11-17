@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>untracklabs — des apps qui ne vous suivent pas</title>
+<meta name="description" content="Un labo indépendant qui conçoit des applications iPhone et Android : utilitaires, jeux, outils du quotidien. Sans pub, sans compte, sans pistage.">
+<meta name="theme-color" content="#07090d">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta property="og:title" content="untracklabs — des apps qui ne vous suivent pas">
+<meta property="og:description" content="Applications iPhone et Android sans pub, sans compte, sans pistage.">
+<meta property="og:image" content="https://untracklabs.org/assets/logo-1024.png">
+<style>
+  :root {
+    --bg: #07090d;
+    --panel: #0d1117;
+    --panel-2: #111722;
+    --line: #1d2531;
+    --text: #e6edf3;
+    --muted: #8b98a5;
+    --cyan: #22d3ee;
+    --violet: #a78bfa;
+    --green: #34d399;
+    --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background:
+      radial-gradient(60rem 30rem at 85% -10%, rgba(167,139,250,.16), transparent 60%),
+      radial-gradient(50rem 30rem at -10% 10%, rgba(34,211,238,.12), transparent 60%),
+      linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px) 0 0 / 32px 32px,
+      linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px) 0 0 / 32px 32px,
+      var(--bg);
+    color: var(--text);
+    font: 17px/1.6 var(--sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+
+  /* En-tête */
+  header { display: flex; align-items: center; justify-content: space-between; padding: 22px 0; }
+  .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+  .brand img { width: 40px; height: 40px; }
+  .wordmark { font: 700 20px/1 var(--mono); letter-spacing: -.02em; }
+  .wordmark .labs { background: linear-gradient(90deg, var(--cyan), var(--violet)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .wordmark .cursor { color: var(--green); animation: blink 1.1s steps(1) infinite; }
+  nav a { font: 14px var(--mono); color: var(--muted); text-decoration: none; margin-left: 22px; }
+  nav a:hover { color: var(--text); }
+
+  /* Accroche */
+  .hero { display: grid; grid-template-columns: 1.15fr .85fr; gap: 48px; align-items: center; padding: 56px 0 72px; }
+  .tag { display: inline-flex; align-items: center; gap: 8px; font: 13px var(--mono); color: var(--green); border: 1px solid rgba(52,211,153,.3); background: rgba(52,211,153,.08); padding: 5px 12px; border-radius: 999px; }
+  .tag::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 10px var(--green); }
+  h1 { font-size: clamp(38px, 6vw, 64px); line-height: 1.04; letter-spacing: -.035em; margin: 22px 0 18px; }
+  h1 .grad { background: linear-gradient(90deg, var(--cyan), var(--violet)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .lead { color: var(--muted); font-size: 19px; max-width: 34em; margin: 0 0 30px; }
+  .cta { display: flex; flex-wrap: wrap; gap: 12px; }
+  .btn { font: 600 15px var(--mono); text-decoration: none; padding: 12px 18px; border-radius: 10px; border: 1px solid var(--line); background: var(--panel); transition: border-color .2s, transform .2s; }
+  .btn:hover { border-color: var(--violet); transform: translateY(-1px); }
+  .btn.primary { background: linear-gradient(90deg, var(--cyan), var(--violet)); color: #07090d; border: 0; }
+
+  /* Terminal */
+  .term { background: rgba(13,17,23,.92); border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 30px 80px -30px rgba(167,139,250,.35); overflow: hidden; font: 14px/1.75 var(--mono); }
+  .term-bar { display: flex; gap: 7px; padding: 12px 14px; border-bottom: 1px solid var(--line); background: var(--panel-2); }
+  .term-bar i { width: 11px; height: 11px; border-radius: 50%; background: #2a3340; }
+  .term-bar i:nth-child(1) { background: #ff5f57; } .term-bar i:nth-child(2) { background: #febc2e; } .term-bar i:nth-child(3) { background: #28c840; }
+  .term pre { margin: 0; padding: 18px 20px 22px; white-space: pre-wrap; }
+  .p { color: var(--violet); } .c { color: var(--cyan); } .ok { color: var(--green); } .m { color: var(--muted); }
+  .blink { display: inline-block; width: 9px; height: 17px; background: var(--green); vertical-align: -3px; animation: blink 1.1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* Sections */
+  section { padding: 56px 0; }
+  .kicker { font: 13px var(--mono); color: var(--cyan); letter-spacing: .08em; text-transform: uppercase; margin: 0 0 10px; }
+  h2 { font-size: clamp(28px, 4vw, 40px); letter-spacing: -.03em; line-height: 1.1; margin: 0 0 14px; }
+  .sub { color: var(--muted); max-width: 40em; margin: 0 0 34px; }
+
+  .grid { display: grid; gap: 18px; }
+  .apps { grid-template-columns: repeat(3, 1fr); }
+  .card { position: relative; background: linear-gradient(180deg, var(--panel-2), var(--panel)); border: 1px solid var(--line); border-radius: 16px; padding: 24px; text-decoration: none; transition: border-color .25s, transform .25s; display: flex; flex-direction: column; }
+  a.card:hover { border-color: rgba(167,139,250,.6); transform: translateY(-3px); }
+  .card img { width: 64px; height: 64px; border-radius: 15px; margin-bottom: 18px; box-shadow: 0 10px 30px -10px rgba(0,0,0,.8); }
+  .card h3 { margin: 0 0 6px; font-size: 21px; letter-spacing: -.02em; }
+  .card p { margin: 0 0 18px; color: var(--muted); font-size: 15.5px; }
+  .chips { margin-top: auto; display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { font: 12px var(--mono); color: var(--muted); border: 1px solid var(--line); border-radius: 6px; padding: 2px 8px; }
+  .card.next { border-style: dashed; background: transparent; }
+  .plus { width: 64px; height: 64px; border-radius: 15px; margin-bottom: 18px; display: grid; place-items: center; font: 300 34px var(--mono); color: var(--violet); border: 1px dashed rgba(167,139,250,.5); }
+
+  .kinds { grid-template-columns: repeat(3, 1fr); }
+  .kind { border: 1px solid var(--line); border-radius: 14px; padding: 20px; background: rgba(13,17,23,.6); }
+  .kind b { display: block; font: 600 15px var(--mono); margin-bottom: 4px; }
+  .kind b span { color: var(--violet); margin-right: 6px; }
+  .kind p { margin: 0; color: var(--muted); font-size: 15px; }
+
+  .principles { grid-template-columns: repeat(4, 1fr); }
+  .pr { border-top: 2px solid var(--line); padding-top: 16px; }
+  .pr .n { font: 700 34px/1 var(--mono); background: linear-gradient(90deg, var(--cyan), var(--violet)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .pr h3 { margin: 10px 0 4px; font-size: 17px; }
+  .pr p { margin: 0; color: var(--muted); font-size: 15px; }
+
+  .contact { text-align: center; border: 1px solid var(--line); border-radius: 20px; padding: 48px 24px; background: radial-gradient(40rem 14rem at 50% 0, rgba(167,139,250,.14), transparent 70%), var(--panel); }
+  .contact .sub { margin: 0 auto 26px; }
+
+  footer { padding: 36px 0 48px; color: var(--muted); font: 13px var(--mono); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+
+  @media (max-width: 860px) {
+    .hero { grid-template-columns: 1fr; padding-top: 28px; }
+    .apps, .kinds { grid-template-columns: 1fr 1fr; }
+    .principles { grid-template-columns: 1fr 1fr; }
+    nav { display: none; }
+  }
+  @media (max-width: 560px) {
+    .apps, .kinds, .principles { grid-template-columns: 1fr; }
+    body { font-size: 16px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <a class="brand" href="./" aria-label="untracklabs, accueil">
+      <img src="assets/logo.svg" alt="">
+      <span class="wordmark">untrack<span class="labs">labs</span><span class="cursor">_</span></span>
+    </a>
+    <nav>
+      <a href="#apps">./apps</a>
+      <a href="#labo">./labo</a>
+      <a href="#principes">./principes</a>
+      <a href="#contact">./contact</a>
+    </nav>
+  </header>
+
+  <div class="hero">
+    <div>
+      <span class="tag">labo indépendant · made in France</span>
+      <h1>Des apps qui <span class="grad">ne vous suivent pas.</span></h1>
+      <p class="lead">untracklabs conçoit des applications iPhone et Android pour toutes sortes de besoins : utilitaires, jeux, outils du quotidien ou du métier. Pensées avec l'IA comme copilote, finies avec soin, et toujours sans pub, sans compte, sans pistage.</p>
+      <div class="cta">
+        <a class="btn primary" href="#apps">Voir les apps</a>
+        <a class="btn" href="#contact">Proposer une idée</a>
+      </div>
+    </div>
+
+    <div class="term" aria-label="Les principes d'untracklabs, façon terminal">
+      <div class="term-bar"><i></i><i></i><i></i></div>
+<pre><span class="p">~/untracklabs</span> <span class="c">$</span> untrack --audit
+<span class="m">› analyse de l'app en cours…</span>
+<span class="ok">✓</span> publicités ............ <span class="ok">0</span>
+<span class="ok">✓</span> traceurs .............. <span class="ok">0</span>
+<span class="ok">✓</span> comptes obligatoires .. <span class="ok">0</span>
+<span class="ok">✓</span> données revendues ..... <span class="ok">0</span>
+<span class="ok">✓</span> vos données ........... <span class="c">sur votre téléphone</span>
+
+<span class="p">~/untracklabs</span> <span class="c">$</span> <span class="blink"></span></pre>
+    </div>
+  </div>
+
+  <section id="apps">
+    <p class="kicker">// sorties du labo</p>
+    <h2>Les applications</h2>
+    <p class="sub">Natives sur iPhone et Android, rapides, sobres, et qui ne parlent qu'aux services dont elles ont vraiment besoin.</p>
+    <div class="grid apps">
+      <a class="card" href="https://matilink.untracklabs.org/">
+        <img src="assets/matilink.png" alt="Icône de Matilink" width="64" height="64">
+        <h3>Matilink</h3>
+        <p>Pour les parents employeurs et les assistantes maternelles : contrat, suivi mensuel, récapitulatif Pajemploi, congés et carnet de liaison. Échanges chiffrés de bout en bout.</p>
+        <div class="chips"><span class="chip">iOS</span><span class="chip">Android</span><span class="chip">famille</span></div>
+      </a>
+      <a class="card" href="https://bidon-fute.untracklabs.org/">
+        <img src="assets/bidon-fute.png" alt="Icône de Bidon-Futé" width="64" height="64">
+        <h3>Bidon-Futé</h3>
+        <p>Le plein le moins cher autour de vous, avec les prix officiels de toutes les stations de France et le coût réel du trajet.</p>
+        <div class="chips"><span class="chip">iOS</span><span class="chip">Android</span><span class="chip">mobilité</span></div>
+      </a>
+      <a class="card next" href="#contact">
+        <div class="plus">+</div>
+        <h3>La prochaine ?</h3>
+        <p>Un jeu, un outil, une idée qui vous manque au quotidien : elle pourrait bien être la prochaine à sortir du labo.</p>
+        <div class="chips"><span class="chip">en préparation</span></div>
+      </a>
+    </div>
+  </section>
+
+  <section id="labo">
+    <p class="kicker">// ce qui peut sortir du labo</p>
+    <h2>Toute sorte d'app, tant qu'elle est utile.</h2>
+    <p class="sub">Pas de spécialité imposée : le labo suit les besoins réels. Un petit agacement du quotidien, une démarche trop compliquée, une envie de jouer, et une app peut en naître.</p>
+    <div class="grid kinds">
+      <div class="kind"><b><span>›</span>jeux</b><p>Des jeux malins et soignés, sans pub entre deux parties ni achats forcés.</p></div>
+      <div class="kind"><b><span>›</span>utilitaires</b><p>Les petits outils qui font gagner du temps, de l'argent ou des nerfs.</p></div>
+      <div class="kind"><b><span>›</span>famille &amp; maison</b><p>Organisation, démarches, budget : simplifier ce qui devrait déjà l'être.</p></div>
+      <div class="kind"><b><span>›</span>mobilité</b><p>Se déplacer mieux et moins cher, avec des données ouvertes et fiables.</p></div>
+      <div class="kind"><b><span>›</span>outils métier</b><p>Des apps taillées pour une profession, sans usine à gaz ni abonnement.</p></div>
+      <div class="kind"><b><span>›</span>expériences IA</b><p>Des idées qui tirent parti de l'IA, en gardant vos données chez vous.</p></div>
+    </div>
+  </section>
+
+  <section id="principes">
+    <p class="kicker">// principes</p>
+    <h2>Le contrat, en quatre lignes.</h2>
+    <div class="grid principles">
+      <div class="pr"><div class="n">00</div><h3>Zéro pub</h3><p>Aucune publicité, ni bannière, ni vidéo imposée.</p></div>
+      <div class="pr"><div class="n">00</div><h3>Zéro traceur</h3><p>Pas d'outil de mesure d'audience ni de SDK publicitaire.</p></div>
+      <div class="pr"><div class="n">00</div><h3>Zéro compte</h3><p>Vous ouvrez l'app, elle marche. Pas d'inscription.</p></div>
+      <div class="pr"><div class="n">01</div><h3>Un seul endroit</h3><p>Vos données restent sur votre téléphone.</p></div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="contact">
+      <p class="kicker">// contact</p>
+      <h2>Une idée d'app ? Un retour ?</h2>
+      <p class="sub">Une remarque sur une app, un bug, ou un besoin qui mériterait sa propre application : écrivez au labo.</p>
+      <a class="btn primary" href="mailto:contact@untracklabs.org">contact@untracklabs.org</a>
+    </div>
+  </section>
+
+  <footer>
+    <span>© 2026 untracklabs</span>
+    <span>Ce site n'utilise ni cookie, ni traceur, ni police externe.</span>
+  </footer>
+
+</div>
+</body>
+</html>
